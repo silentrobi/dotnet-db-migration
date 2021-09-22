@@ -22,7 +22,7 @@ namespace PostApi.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Categories",
-                schema: "development",
+                schema: _schema.Schema,
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuid_generate_v4()"),
@@ -38,7 +38,7 @@ namespace PostApi.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Posts",
-                schema: "development",
+                schema: _schema.Schema,
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuid_generate_v4()"),
@@ -54,7 +54,7 @@ namespace PostApi.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "PostCategory",
-                schema: "development",
+                schema: _schema.Schema,
                 columns: table => new
                 {
                     PostId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -69,14 +69,14 @@ namespace PostApi.Database.Migrations
                     table.ForeignKey(
                         name: "FK_PostCategory_Categories_CategoryId",
                         column: x => x.CategoryId,
-                        principalSchema: "development",
+                        principalSchema: _schema.Schema,
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PostCategory_Posts_PostId",
                         column: x => x.PostId,
-                        principalSchema: "development",
+                        principalSchema: _schema.Schema,
                         principalTable: "Posts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -84,7 +84,7 @@ namespace PostApi.Database.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_PostCategory_CategoryId",
-                schema: "development",
+                schema: _schema.Schema,
                 table: "PostCategory",
                 column: "CategoryId");
         }
@@ -93,15 +93,15 @@ namespace PostApi.Database.Migrations
         {
             migrationBuilder.DropTable(
                 name: "PostCategory",
-                schema: "development");
+                schema: _schema.Schema);
 
             migrationBuilder.DropTable(
                 name: "Categories",
-                schema: "development");
+                schema: _schema.Schema);
 
             migrationBuilder.DropTable(
                 name: "Posts",
-                schema: "development");
+                schema: _schema.Schema);
         }
     }
 }

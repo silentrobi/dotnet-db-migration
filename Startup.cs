@@ -36,16 +36,17 @@ namespace PostApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PostApi", Version = "v1" });
             });
 
+            string SCHEMA = Environment.GetEnvironmentVariable("DbSchema");
             services.AddDbContext<PostDbContext>(options =>
            {
-               Console.WriteLine(Configuration.GetSection("EmailSettings"));
                options.UseNpgsql(Environment.GetEnvironmentVariable("ConnectionStrings"),
                       npSqlOptions =>
                       {
                           npSqlOptions.CommandTimeout(3300);
+                          npSqlOptions.MigrationsHistoryTable("__EFMigrationsHistory", SCHEMA);
                       });
 
-           }).AddSingleton<IDbContextSchema>(new DbContextSchema(Environment.GetEnvironmentVariable("DbSchema")));
+           }).AddSingleton<IDbContextSchema>(new DbContextSchema(SCHEMA));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

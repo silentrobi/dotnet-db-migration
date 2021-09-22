@@ -10,7 +10,7 @@ using PostApi.Database.Contexts;
 namespace PostApi.Database.Migrations
 {
     [DbContext(typeof(PostDbContext))]
-    [Migration("20210919195218_Initial")]
+    [Migration("20210922091107_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

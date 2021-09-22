@@ -8,10 +8,10 @@ namespace PostApi.Database.Contexts
 {
     public class PostDbContext : DbContext, IDbContextSchema
     {
-        public string? Schema { get; }
+        public string Schema { get; }
         public PostDbContext(DbContextOptions<PostDbContext> options, IDbContextSchema schema = null) : base(options)
         {
-            Schema = schema?.Schema;
+            Schema = schema.Schema ?? throw new ArgumentNullException(nameof(schema));
         }
 
         // Table objects
@@ -19,11 +19,8 @@ namespace PostApi.Database.Contexts
         public DbSet<Category> Categories { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.ReplaceService<IModelCacheKeyFactory, DbSchemaAwareModelCacheKeyFactory>();
-                optionsBuilder.ReplaceService<IMigrationsAssembly, DbSchemaAwareMigrationAssembly>();
-            }
+            optionsBuilder.ReplaceService<IModelCacheKeyFactory, DbSchemaAwareModelCacheKeyFactory>();
+            optionsBuilder.ReplaceService<IMigrationsAssembly, DbSchemaAwareMigrationAssembly>();
 
             base.OnConfiguring(optionsBuilder);
         }
@@ -31,10 +28,11 @@ namespace PostApi.Database.Contexts
         // Alternative way to define your table, relationship, constraints etc..
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema(Schema);
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.HasPostgresExtension("uuid-ossp");
 
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.HasPostgresExtension("uuid-ossp");
+            modelBuilder.HasDefaultSchema(Schema);  //Required for dynamic schema change
             // Post Table
             modelBuilder.Entity<Post>(
                 p =>
